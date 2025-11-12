@@ -1,5 +1,5 @@
 // This is a Vercel Serverless Function to handle messages
-// It uses Upstash Redis to store messages
+// It uses Upstash Redis REST API to store messages
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -13,15 +13,15 @@ export default async function handler(req, res) {
     return;
   }
 
+  const redisUrl = process.env.KV_REST_API_URL;
+  const redisToken = process.env.KV_REST_API_TOKEN;
+
+  if (!redisUrl || !redisToken) {
+    console.error('Redis environment variables not configured');
+    return res.status(500).json({ error: 'Database not configured' });
+  }
+
   try {
-    const redisUrl = process.env.KV_REST_API_URL;
-    const redisToken = process.env.KV_REST_API_TOKEN;
-
-    if (!redisUrl || !redisToken) {
-      console.error('Redis environment variables not configured');
-      return res.status(500).json({ error: 'Database not configured' });
-    }
-
     if (req.method === 'GET') {
       // Get all messages
       try {
@@ -30,19 +30,25 @@ export default async function handler(req, res) {
             'Authorization': `Bearer ${redisToken}`
           }
         });
+        
+        if (!response.ok) {
+          console.error('Redis GET failed:', response.status);
+          return res.status(200).json([]);
+        }
+
         const data = await response.json();
         
-        if (data.result) {
-          try {
-            const messages = JSON.parse(data.result);
-            return res.status(200).json(Array.isArray(messages) ? messages : []);
-          } catch (parseError) {
-            console.error('Error parsing messages:', parseError);
-            return res.status(200).json([]);
-          }
+        if (!data.result) {
+          return res.status(200).json([]);
         }
-        
-        return res.status(200).json([]);
+
+        try {
+          const messages = JSON.parse(data.result);
+          return res.status(200).json(Array.isArray(messages) ? messages : []);
+        } catch (e) {
+          console.error('Parse error:', e, 'data:', data.result);
+          return res.status(200).json([]);
+        }
       } catch (error) {
         console.error('Error fetching messages:', error);
         return res.status(200).json([]);
@@ -50,7 +56,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      // Add a new message
       const { name, message } = req.body;
 
       if (!name || !message) {
@@ -68,33 +73,21 @@ export default async function handler(req, res) {
             }
           });
           
-          if (!getResponse.ok) {
-            console.error('Failed to get messages:', getResponse.status);
-            messages = [];
-          } else {
+          if (getResponse.ok) {
             const getData = await getResponse.json();
-            
             if (getData.result) {
-              try {
-                const parsed = JSON.parse(getData.result);
-                messages = Array.isArray(parsed) ? parsed : [];
-              } catch (e) {
-                console.error('Parse error:', e);
+              messages = JSON.parse(getData.result);
+              if (!Array.isArray(messages)) {
                 messages = [];
               }
             }
           }
-        } catch (fetchError) {
-          console.error('Fetch error:', fetchError);
+        } catch (e) {
+          console.error('Error getting existing messages:', e);
           messages = [];
         }
 
-        // Ensure messages is always an array
-        if (!Array.isArray(messages)) {
-          messages = [];
-        }
-
-        // Add new message
+        // Create new message
         const newMessage = {
           id: Date.now(),
           name: name,
@@ -104,31 +97,34 @@ export default async function handler(req, res) {
 
         messages.push(newMessage);
 
-        // Save back to Redis
+        // Save to Redis using the correct format
+        const jsonString = JSON.stringify(messages);
+        
         const setResponse = await fetch(`${redisUrl}/set/wedding_messages`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${redisToken}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(JSON.stringify(messages))
+          body: JSON.stringify({ value: jsonString })
         });
 
-        if (setResponse.ok) {
+        const setData = await setResponse.json();
+        
+        if (setData.result === 'OK' || setResponse.ok) {
+          console.log('Message saved successfully');
           return res.status(200).json({ success: true, message: newMessage });
         } else {
-          const errorData = await setResponse.text();
-          console.error('Redis set error:', errorData);
-          return res.status(500).json({ error: 'Failed to save message to Redis' });
+          console.error('Redis set failed:', setData);
+          return res.status(500).json({ error: 'Failed to save message', details: setData });
         }
       } catch (error) {
-        console.error('Error saving message:', error);
+        console.error('Error in POST:', error);
         return res.status(500).json({ error: 'Internal server error', details: error.message });
       }
     }
 
     if (req.method === 'DELETE') {
-      // Delete a specific message by ID
       const { id, password } = req.body;
 
       if (!id) {
@@ -143,46 +139,35 @@ export default async function handler(req, res) {
         // Get existing messages
         let messages = [];
         
-        try {
-          const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
-            headers: {
-              'Authorization': `Bearer ${redisToken}`
-            }
-          });
-          
-          if (getResponse.ok) {
-            const getData = await getResponse.json();
-            
-            if (getData.result) {
-              try {
-                const parsed = JSON.parse(getData.result);
-                messages = Array.isArray(parsed) ? parsed : [];
-              } catch (e) {
-                messages = [];
-              }
+        const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
+          headers: {
+            'Authorization': `Bearer ${redisToken}`
+          }
+        });
+        
+        if (getResponse.ok) {
+          const getData = await getResponse.json();
+          if (getData.result) {
+            messages = JSON.parse(getData.result);
+            if (!Array.isArray(messages)) {
+              messages = [];
             }
           }
-        } catch (fetchError) {
-          console.error('Fetch error:', fetchError);
-          messages = [];
         }
 
-        // Ensure messages is always an array
-        if (!Array.isArray(messages)) {
-          messages = [];
-        }
-
-        // Filter out the message with the specified ID
+        // Filter out the message
         const filteredMessages = messages.filter(msg => msg.id !== id);
 
         // Save back to Redis
+        const jsonString = JSON.stringify(filteredMessages);
+        
         await fetch(`${redisUrl}/set/wedding_messages`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${redisToken}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(JSON.stringify(filteredMessages))
+          body: JSON.stringify({ value: jsonString })
         });
 
         return res.status(200).json({ success: true, message: 'Message deleted' });
@@ -193,7 +178,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'PUT') {
-      // Delete all messages (clear everything)
       const { password } = req.body;
 
       if (!password || password !== 'pikachu') {
@@ -217,7 +201,7 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Unhandled error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 }
