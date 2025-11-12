@@ -21,34 +21,41 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Database not configured' });
   }
 
+  const makeRedisCall = async (command, args = []) => {
+    try {
+      const response = await fetch(`${redisUrl}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${redisToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([command, ...args])
+      });
+
+      if (!response.ok) {
+        throw new Error(`Redis error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Redis call error:', error);
+      throw error;
+    }
+  };
+
   try {
     if (req.method === 'GET') {
-      // Get all messages
+      // Get all messages using GET
       try {
-        const response = await fetch(`${redisUrl}/get/wedding_messages`, {
-          headers: {
-            'Authorization': `Bearer ${redisToken}`
-          }
-        });
+        const result = await makeRedisCall('GET', ['wedding_messages']);
         
-        if (!response.ok) {
-          console.error('Redis GET failed:', response.status);
+        if (!result.result) {
           return res.status(200).json([]);
         }
 
-        const data = await response.json();
-        
-        if (!data.result) {
-          return res.status(200).json([]);
-        }
-
-        try {
-          const messages = JSON.parse(data.result);
-          return res.status(200).json(Array.isArray(messages) ? messages : []);
-        } catch (e) {
-          console.error('Parse error:', e, 'data:', data.result);
-          return res.status(200).json([]);
-        }
+        const messages = JSON.parse(result.result);
+        return res.status(200).json(Array.isArray(messages) ? messages : []);
       } catch (error) {
         console.error('Error fetching messages:', error);
         return res.status(200).json([]);
@@ -67,23 +74,16 @@ export default async function handler(req, res) {
         let messages = [];
         
         try {
-          const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
-            headers: {
-              'Authorization': `Bearer ${redisToken}`
-            }
-          });
+          const result = await makeRedisCall('GET', ['wedding_messages']);
           
-          if (getResponse.ok) {
-            const getData = await getResponse.json();
-            if (getData.result) {
-              messages = JSON.parse(getData.result);
-              if (!Array.isArray(messages)) {
-                messages = [];
-              }
+          if (result.result) {
+            messages = JSON.parse(result.result);
+            if (!Array.isArray(messages)) {
+              messages = [];
             }
           }
         } catch (e) {
-          console.error('Error getting existing messages:', e);
+          console.error('Error getting messages:', e);
           messages = [];
         }
 
@@ -97,27 +97,12 @@ export default async function handler(req, res) {
 
         messages.push(newMessage);
 
-        // Save to Redis using the correct format
-        const jsonString = JSON.stringify(messages);
+        // Save to Redis
+        const setResult = await makeRedisCall('SET', ['wedding_messages', JSON.stringify(messages)]);
         
-        const setResponse = await fetch(`${redisUrl}/set/wedding_messages`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${redisToken}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ value: jsonString })
-        });
+        console.log('SET result:', setResult);
 
-        const setData = await setResponse.json();
-        
-        if (setData.result === 'OK' || setResponse.ok) {
-          console.log('Message saved successfully');
-          return res.status(200).json({ success: true, message: newMessage });
-        } else {
-          console.error('Redis set failed:', setData);
-          return res.status(500).json({ error: 'Failed to save message', details: setData });
-        }
+        return res.status(200).json({ success: true, message: newMessage });
       } catch (error) {
         console.error('Error in POST:', error);
         return res.status(500).json({ error: 'Internal server error', details: error.message });
@@ -139,19 +124,12 @@ export default async function handler(req, res) {
         // Get existing messages
         let messages = [];
         
-        const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
-          headers: {
-            'Authorization': `Bearer ${redisToken}`
-          }
-        });
+        const result = await makeRedisCall('GET', ['wedding_messages']);
         
-        if (getResponse.ok) {
-          const getData = await getResponse.json();
-          if (getData.result) {
-            messages = JSON.parse(getData.result);
-            if (!Array.isArray(messages)) {
-              messages = [];
-            }
+        if (result.result) {
+          messages = JSON.parse(result.result);
+          if (!Array.isArray(messages)) {
+            messages = [];
           }
         }
 
@@ -159,16 +137,7 @@ export default async function handler(req, res) {
         const filteredMessages = messages.filter(msg => msg.id !== id);
 
         // Save back to Redis
-        const jsonString = JSON.stringify(filteredMessages);
-        
-        await fetch(`${redisUrl}/set/wedding_messages`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${redisToken}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ value: jsonString })
-        });
+        await makeRedisCall('SET', ['wedding_messages', JSON.stringify(filteredMessages)]);
 
         return res.status(200).json({ success: true, message: 'Message deleted' });
       } catch (error) {
@@ -185,13 +154,7 @@ export default async function handler(req, res) {
       }
 
       try {
-        await fetch(`${redisUrl}/del/wedding_messages`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${redisToken}`
-          }
-        });
-
+        await makeRedisCall('DEL', ['wedding_messages']);
         return res.status(200).json({ success: true, message: 'All messages cleared' });
       } catch (error) {
         console.error('Error clearing messages:', error);
