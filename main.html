@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agatheo & Joann - Wedding Invitation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B7355;
+            --secondary: #D4C5B9;
+            --dark: #2C2C2C;
+            --light: #FAFAFA;
+            --accent: #A8936E;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            overflow-x: hidden;
+        }
+
+        .elegant-font {
+            font-family: 'Cormorant', serif;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), url('https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__4KvFm2vVg7daml16xryXQ__0_hw7xdj.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212,197,185,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        /* Floating particles/hearts animation */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, rgba(212,197,185,0.3), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(168,147,110,0.3), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(212,197,185,0.2), transparent),
+                radial-gradient(1px 1px at 80% 10%, rgba(168,147,110,0.2), transparent),
+                radial-gradient(2px 2px at 90% 60%, rgba(212,197,185,0.25), transparent),
+                radial-gradient(1px 1px at 30% 80%, rgba(168,147,110,0.25), transparent);
+            background-size: 200% 200%;
+            animation: floatingParticles 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes floatingParticles {
+            0%, 100% { 
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 30% 80%;
+                opacity: 1;
+            }
+            25% {
+                background-position: 100% 50%, 0% 50%, 80% 20%, 20% 80%, 70% 30%, 60% 90%;
+                opacity: 0.7;
+            }
+            50% { 
+                background-position: 50% 100%, 50% 0%, 30% 70%, 70% 30%, 40% 80%, 80% 40%;
+                opacity: 1;
+            }
+            75% {
+                background-position: 0% 50%, 100% 50%, 60% 40%, 40% 60%, 20% 70%, 90% 20%;
+                opacity: 0.7;
+            }
+        }
+
+        /* Decorative corner flourishes */
+        .hero-flourish {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .hero-flourish.top-left {
+            top: 20px;
+            left: 20px;
+            border-top: 2px solid var(--accent);
+            border-left: 2px solid var(--accent);
+            animation: flourishExpandTopLeft 2s ease-out forwards;
+        }
+
+        .hero-flourish.top-right {
+            top: 20px;
+            right: 20px;
+            border-top: 2px solid var(--accent);
+            border-right: 2px solid var(--accent);
+            animation: flourishExpandTopRight 2s ease-out forwards;
+        }
+
+        .hero-flourish.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-bottom: 2px solid var(--accent);
+            border-left: 2px solid var(--accent);
+            animation: flourishExpandBottomLeft 2s ease-out forwards;
+        }
+
+        .hero-flourish.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 2px solid var(--accent);
+            border-right: 2px solid var(--accent);
+            animation: flourishExpandBottomRight 2s ease-out forwards;
+        }
+
+        @keyframes flourishExpandTopLeft {
+            from { width: 0; height: 0; opacity: 0; }
+            to { width: 150px; height: 150px; opacity: 0.15; }
+        }
+
+        @keyframes flourishExpandTopRight {
+            from { width: 0; height: 0; opacity: 0; }
+            to { width: 150px; height: 150px; opacity: 0.15; }
+        }
+
+        @keyframes flourishExpandBottomLeft {
+            from { width: 0; height: 0; opacity: 0; }
+            to { width: 150px; height: 150px; opacity: 0.15; }
+        }
+
+        @keyframes flourishExpandBottomRight {
+            from { width: 0; height: 0; opacity: 0; }
+            to { width: 150px; height: 150px; opacity: 0.15; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .save-date {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: #D9BE9E;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            animation: fadeInDown 1s ease-out, shimmer 3s ease-in-out 2s infinite;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .couple-names {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin: 20px 0;
+            color: #F5F1ED;
+            animation: fadeInUp 1s ease-out 0.3s both, gentleFloat 4s ease-in-out 2s infinite;
+            position: relative;
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .couple-names::after {
+            content: '♥';
+            position: absolute;
+            left: 50%;
+            bottom: -30px;
+            transform: translateX(-50%) scale(0);
+            color: #D9BE9E;
+            font-size: 1.5rem;
+            animation: heartBeat 2s ease-in-out 1.5s infinite;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .date-time {
+            font-size: 1.1rem;
+            color: #F5F1ED;
+            margin: 30px 0;
+            line-height: 1.8;
+            animation: fadeIn 1s ease-out 0.6s both, slideInFromSides 1.2s ease-out 0.6s both;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .countdown {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out 0.9s both;
+        }
+
+        .countdown-item {
+            text-align: center;
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+            transition: transform 0.3s ease;
+        }
+
+        .countdown-item:nth-child(1) {
+            animation-delay: 1s;
+        }
+
+        .countdown-item:nth-child(2) {
+            animation-delay: 1.15s;
+        }
+
+        .countdown-item:nth-child(3) {
+            animation-delay: 1.3s;
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #D9BE9E;
+            display: block;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover .countdown-number {
+            color: #F5F1ED;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: #D9BE9E;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { 
+                transform: translateX(-50%) scale(0);
+                opacity: 0;
+            }
+            10% { 
+                transform: translateX(-50%) scale(1.2);
+                opacity: 1;
+            }
+            20% { 
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            30% { 
+                transform: translateX(-50%) scale(1.3);
+                opacity: 1;
+            }
+            40%, 90% { 
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromSides {
+            from { 
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            to { 
+                transform: scaleX(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Sparkle effect */
+        @keyframes sparkle {
+            0%, 100% { 
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1) rotate(180deg);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 60px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        /* Invitation Message */
+        .invitation {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .invitation-text {
+            line-height: 1.8;
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 30px;
+        }
+
+        .family-info {
+            display: grid;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .family-side {
+            text-align: center;
+        }
+
+        .family-label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .family-name {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .parents {
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-top: 10px;
+        }
+
+        .contact-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Gallery */
+        .gallery {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .gallery-item:first-child {
+            grid-column: span 3;
+            aspect-ratio: 16/9;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Location */
+        .location {
+            background: #f8f6f4;
+        }
+
+        .venue-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .venue-name {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .venue-address {
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 30px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-container > div {
+            width: 100% !important;
+            max-width: 640px;
+        }
+
+        .map-container img.map {
+            width: 100% !important;
+            height: auto !important;
+            border: 1px solid #ccc;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 15px;
+            background: white;
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* RSVP */
+        .rsvp {
+            background: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Gift Info */
+        .gift {
+            background: #f8f6f4;
+        }
+
+        .gift-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .account-cards {
+            display: grid;
+            gap: 20px;
+        }
+
+        .account-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .account-label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .account-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .account-number {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            padding: 8px 15px;
+            background: var(--secondary);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Share */
+        .share {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .share-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Modal for Gallery */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .couple-names {
+                font-size: 2.5rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 40px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-flourish top-left"></div>
+        <div class="hero-flourish top-right"></div>
+        <div class="hero-flourish bottom-left"></div>
+        <div class="hero-flourish bottom-right"></div>
+        
+        <div class="hero-content">
+            <div class="save-date">SAVE THE DATE</div>
+            <h1 class="couple-names elegant-font">Agatheo & Joann</h1>
+            <div class="date-time">
+                <div>01.17.2026</div>
+                <div>Saturday, 11:00 AM</div>
+            </div>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Invitation -->
+    <section class="section invitation-section">
+        <h2 class="section-title elegant-font">We're Getting Married</h2>
+        <div class="invitation">
+            <p class="invitation-text">
+                With grateful hearts,<br>
+                we invite you to share in the joy of our union.<br><br>
+                God has blessed us with love,<br>
+                and in His grace, we will become one.
+            </p>
+            
+            <div class="family-info">
+                <div class="family-side">
+                    <div class="family-label">Groom</div>
+                    <div class="family-name elegant-font">Agatheo</div>
+                    <div class="parents">Son of Rodry & Barbara</div>
+                    <div class="contact-btns">
+                        <a href="tel:010-2940-8815" class="btn-icon">📞</a>
+                        <a href="sms:010-2940-8815" class="btn-icon">💬</a>
+                    </div>
+                </div>
+                
+                <div class="family-side">
+                    <div class="family-label">Bride</div>
+                    <div class="family-name elegant-font">Joann</div>
+                    <div class="parents">Daughter of Jameson & Jamie</div>
+                    <div class="contact-btns">
+                        <a href="tel:010-6707-3832" class="btn-icon">📞</a>
+                        <a href="sms:010-6707-3832" class="btn-icon">💬</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery">
+        <h2 class="section-title elegant-font">Our Moments</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__0_xwc7oi.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__1_igm5vi.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__2_cktgtk.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__3_em7lpa.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__zDgEZV1P48AoRiIdmtZ7A__4_efmtwt.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__zDgEZV1P48AoRiIdmtZ7A__5_t2saom.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__zDgEZV1P48AoRiIdmtZ7A__6_p2cehn.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__EHHtRrvFzuvi5aDB3BT7wg__7_gw6w1v.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__EHHtRrvFzuvi5aDB3BT7wg__8_tqjqng.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__EHHtRrvFzuvi5aDB3BT7wg__9_ic8khu.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__EHHtRrvFzuvi5aDB3BT7wg__10_etsdkr.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__EHHtRrvFzuvi5aDB3BT7wg__11_q8ae54.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__EHHtRrvFzuvi5aDB3BT7wg__12_xxcucp.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__EHHtRrvFzuvi5aDB3BT7wg__13_kwyo95.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__EHHtRrvFzuvi5aDB3BT7wg__14_epzj5j.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__EHHtRrvFzuvi5aDB3BT7wg__15_ebnoh6.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__EHHtRrvFzuvi5aDB3BT7wg__16_vmi11r.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__EHHtRrvFzuvi5aDB3BT7wg__17_diqgb8.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__4KvFm2vVg7daml16xryXQ__0_hw7xdj.jpg" alt="Agatheo & Joann">
+            </div>
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section class="section location">
+        <h2 class="section-title elegant-font">Location</h2>
+        <div class="venue-info">
+            <div class="venue-name">MARRYVIA FORÊT <br> Wedding Hall</div>
+            <div class="venue-address">
+                13 Dunsanjung-ro 134beon-gil, Seo-gu, <br>
+                 Daejeon, South Korea
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div style="font:normal normal 400 12px/normal dotum, sans-serif; width:100%; color:#333; position:relative">
+                <div style="height: 200px;">
+                    <a href="https://map.kakao.com/?urlX=586984.9999999981&amp;urlY=794902.9999999993&amp;name=%EB%8C%80%EC%A0%84%20%EC%84%9C%EA%B5%AC%20%EB%91%94%EC%82%B0%EC%A4%91%EB%A1%9C134%EB%B2%88%EA%B8%B8%2013&amp;map_type=TYPE_MAP&amp;from=roughmap" target="_blank">
+                        <img class="map" src="http://t1.daumcdn.net/roughmap/imgmap/ba07ca358ca213ec8ac896262d96c657654d773072778623574b9bbf754559f6" width="638px" height="358px" style="border:1px solid #ccc;">
+                    </a>
+                </div>
+                <div style="overflow: hidden; padding: 7px 11px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 0px 0px 2px 2px; background-color: rgb(249, 249, 249);">
+                    <a href="https://map.kakao.com" target="_blank" style="float: left;">
+                        <img src="//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/logo_kakaomap.png" width="72" height="16" alt="카카오맵" style="display:block;width:72px;height:16px">
+                    </a>
+                    <div style="float: right; position: relative; top: 1px; font-size: 11px;">
+                        <a target="_blank" href="https://map.kakao.com/?from=roughmap&amp;eName=%EB%8C%80%EC%A0%84%20%EC%84%9C%EA%B5%AC%20%EB%91%94%EC%82%B0%EC%A4%91%EB%A1%9C134%EB%B2%88%EA%B8%B8%2013&amp;eX=586984.9999999981&amp;eY=794902.9999999993" style="float:left;height:15px;padding-top:1px;line-height:15px;color:#000;text-decoration: none;">길찾기</a>
+                    </div>
+                </div>
+                <div>
+                    <span style="border-bottom:0px none #333333;position:absolute;left:-25px;top:-136px;width:0px;height:40px"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <a href="#" class="nav-btn" onclick="openKakaoNavi()">Kakao Navi</a>
+            <a href="#" class="nav-btn" onclick="openTMap()">T Map</a>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="section rsvp">
+        <h2 class="section-title elegant-font">Leave a Message</h2>
+        <form id="rsvpForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Gift -->
+    <section class="section gift">
+        <h2 class="section-title elegant-font">Send Your Wishes</h2>
+        <p class="gift-intro">
+            Your presence is the greatest gift.<br>
+            If you wish to send a monetary gift, here are our details:
+        </p>
+        
+        <div class="account-cards">
+            <div class="account-card">
+                <div class="account-label">Groom's Account</div>
+                <div>Woori Bank</div>
+                <div class="account-details">
+                    <span class="account-number">1002-060-491617</span>
+                    <button class="copy-btn" onclick="copyAccount('1002-060-491617')">Copy</button>
+                </div>
+                <div style="margin-top: 10px; color: var(--accent);">Shandyra Agatheo Jetro</div>
+            </div>
+            
+            <div class="account-card">
+                <div class="account-label">Bride's Account</div>
+                <div>Woori Bank</div>
+                <div class="account-details">
+                    <span class="account-number">1002-659-654868</span>
+                    <button class="copy-btn" onclick="copyAccount('1002-659-654868')">Copy</button>
+                </div>
+                <div style="margin-top: 10px; color: var(--accent);">Ng Zu Ern</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Share -->
+    <section class="share">
+        <h2 class="section-title elegant-font">Share Our Joy</h2>
+        <div class="share-buttons">
+            <a href="#" class="share-btn" onclick="shareKakao()">💬</a>
+            <a href="#" class="share-btn" onclick="shareFacebook()">f</a>
+            <a href="#" class="share-btn" onclick="shareTwitter()">🐦</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Thank you for being part of our special day</p>
+        <p style="margin-top: 10px; opacity: 0.7;">Agatheo & Joann</p>
+    </footer>
+
+    <!-- Modal for Gallery -->
+    <div class="modal" id="imageModal" onclick="closeModal()">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            // Get the current date and time from the browser
+            const now = new Date();
+            
+            // Wedding date: January 17, 2026 at 11:00 AM
+            const weddingDate = new Date('2026-01-17T11:00:00');
+            
+            // Calculate the time difference in milliseconds
+            const distance = weddingDate.getTime() - now.getTime();
+            
+            // Check if the wedding date has passed
+            if (distance < 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                
+                // Optional: Display a message that the wedding has passed
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    const celebrationMessage = document.createElement('div');
+                    celebrationMessage.style.marginTop = '20px';
+                    celebrationMessage.style.fontSize = '1.2rem';
+                    celebrationMessage.style.color = 'var(--primary)';
+                    celebrationMessage.textContent = 'We are now married! 💕';
+                    countdownElement.parentNode.insertBefore(celebrationMessage, countdownElement.nextSibling);
+                }
+                return;
+            }
+            
+            // Calculate time units
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update the display with zero-padded values
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            
+            // Optional: Log the current time for debugging
+            console.log(`Current time: ${now.toLocaleString()}`);
+            console.log(`Wedding time: ${weddingDate.toLocaleString()}`);
+            console.log(`Time remaining: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+        }
+
+        // Initialize countdown immediately
+        updateCountdown();
+        
+        // Update every minute (60000ms) - you can change this to every second (1000ms) if you want seconds display
+        const countdownInterval = setInterval(updateCountdown, 60000);
+        
+        // Optional: Add seconds to the countdown display
+        function updateCountdownWithSeconds() {
+            const now = new Date();
+            const weddingDate = new Date('2026-01-17T11:00:00');
+            const distance = weddingDate.getTime() - now.getTime();
+            
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                clearInterval(secondsInterval);
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        }
+        
+        // Uncomment the line below if you want to update every second instead of every minute
+        // const secondsInterval = setInterval(updateCountdownWithSeconds, 1000);
+
+        // Gallery Modal
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = element.querySelector('img').src;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Copy Account Number
+        function copyAccount(accountNumber) {
+            navigator.clipboard.writeText(accountNumber).then(() => {
+                alert('Account number copied!');
+            });
+        }
+
+        // Navigation
+        function openKakaoNavi() {
+            const url = 'kakaomap://route?ep=36.3590570,127.3876476&by=CAR';
+            window.location.href = url;
+        }
+
+        function openTMap() {
+            const url = 'tmap://route?goalname=메리비아포레 웨딩홀&goalx=127.3876476&goaly=36.3590570';
+            window.location.href = url;
+        }
+
+        // Share Functions
+        function shareKakao() {
+            // Implement Kakao sharing
+            alert('Kakao sharing - implement with Kakao SDK');
+        }
+
+        function shareFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        }
+
+        function shareTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Join us for our wedding!');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        }
+
+        // RSVP Form
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Implement form submission logic
+            alert('Thank you for your message!');
+            this.reset();
+        });
+
+        // Naver Map Integration (if needed)
+        function initMap() {
+            // Add Naver Maps script and initialization here if required
+            // For now, using a placeholder
+        }
+
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
