@@ -616,6 +616,79 @@
             transform: translateY(-2px);
         }
 
+        /* Messages Display */
+        .message-card {
+            background: #f8f6f4;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            animation: slideInMessage 0.5s ease-out forwards;
+            position: relative;
+        }
+
+        .message-card:hover .delete-btn {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        @keyframes slideInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-card-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .message-card-text {
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .message-card-date {
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-top: 12px;
+            opacity: 0.8;
+        }
+
         /* Gift Info */
         .gift {
             background: #f8f6f4;
@@ -841,6 +914,9 @@
         <h2 class="section-title elegant-font">Our Moments</h2>
         <div class="gallery-grid">
             <div class="gallery-item" onclick="openModal(this)">
+                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__zDgEZV1P48AoRiIdmtZ7A__4_efmtwt.jpg" alt="Agatheo & Joann">
+            </div>
+            <div class="gallery-item" onclick="openModal(this)">
                 <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__0_xwc7oi.jpg" alt="Agatheo & Joann">
             </div>
             <div class="gallery-item" onclick="openModal(this)">
@@ -852,9 +928,7 @@
             <div class="gallery-item" onclick="openModal(this)">
                 <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622895/card__zDgEZV1P48AoRiIdmtZ7A__3_em7lpa.jpg" alt="Agatheo & Joann">
             </div>
-            <div class="gallery-item" onclick="openModal(this)">
-                <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622893/card__zDgEZV1P48AoRiIdmtZ7A__4_efmtwt.jpg" alt="Agatheo & Joann">
-            </div>
+            
             <div class="gallery-item" onclick="openModal(this)">
                 <img src="https://res.cloudinary.com/dvwdvmk1y/image/upload/v1762622894/card__zDgEZV1P48AoRiIdmtZ7A__5_t2saom.jpg" alt="Agatheo & Joann">
             </div>
@@ -934,7 +1008,7 @@
         
         <div class="nav-buttons">
             <a href="#" class="nav-btn" onclick="openKakaoNavi()">Kakao Navi</a>
-            <a href="#" class="nav-btn" onclick="openTMap()">T Map</a>
+            <a href="#" class="nav-btn" onclick="openTMap()">Naver Map</a>
         </div>
     </section>
 
@@ -952,6 +1026,11 @@
             </div>
             <button type="submit" class="submit-btn">Send Message</button>
         </form>
+        
+        <div id="messagesContainer" style="margin-top: 50px; padding-top: 40px; border-top: 2px solid var(--secondary);">
+            <h3 style="text-align: center; margin-bottom: 30px; color: var(--primary); font-family: 'Cormorant', serif; font-size: 1.8rem;">Messages from Our Guests</h3>
+            <div id="messagesList" style="display: grid; gap: 20px;"></div>
+        </div>
     </section>
 
     <!-- Gift -->
@@ -985,15 +1064,8 @@
         </div>
     </section>
 
-    <!-- Share -->
-    <section class="share">
-        <h2 class="section-title elegant-font">Share Our Joy</h2>
-        <div class="share-buttons">
-            <a href="#" class="share-btn" onclick="shareKakao()">💬</a>
-            <a href="#" class="share-btn" onclick="shareFacebook()">f</a>
-            <a href="#" class="share-btn" onclick="shareTwitter()">🐦</a>
-        </div>
-    </section>
+
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -1112,7 +1184,7 @@
         }
 
         function openTMap() {
-            const url = 'tmap://route?goalname=메리비아포레 웨딩홀&goalx=127.3876476&goaly=36.3590570';
+            const url = 'https://naver.me/Fl2uKANM';
             window.location.href = url;
         }
 
@@ -1133,12 +1205,131 @@
             window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
         }
 
-        // RSVP Form
+        // RSVP Form with Vercel KV
+        function loadMessages() {
+            const messagesList = document.getElementById('messagesList');
+            const messagesContainer = document.getElementById('messagesContainer');
+
+            // Fetch messages from Vercel API
+            fetch('/api/messages')
+                .then(response => response.json())
+                .then(messages => {
+                    messagesList.innerHTML = '';
+
+                    if (!messages || messages.length === 0) {
+                        messagesContainer.style.display = 'none';
+                        return;
+                    }
+
+                    messagesContainer.style.display = 'block';
+
+                    // Display messages in reverse order (newest first)
+                    messages.reverse().forEach((msg, index) => {
+                        const messageCard = document.createElement('div');
+                        messageCard.className = 'message-card';
+                        messageCard.style.animationDelay = `${index * 0.1}s`;
+
+                        const dateObj = new Date(msg.timestamp);
+                        const formattedDate = dateObj.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        messageCard.innerHTML = `
+                            <button class="delete-btn" onclick="deleteMessage(${msg.id})">✕</button>
+                            <div class="message-card-name">${escapeHtml(msg.name)}</div>
+                            <div class="message-card-text">${escapeHtml(msg.message).replace(/\n/g, '<br>')}</div>
+                            <div class="message-card-date">${formattedDate}</div>
+                        `;
+
+                        messagesList.appendChild(messageCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading messages:', error);
+                    document.getElementById('messagesContainer').style.display = 'none';
+                });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function deleteMessage(id) {
+            const password = prompt('Enter password to delete this message:');
+            
+            if (password === null) {
+                return; // User cancelled
+            }
+
+            if (!password) {
+                alert('Password required');
+                return;
+            }
+
+            fetch('/api/messages', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Message deleted successfully');
+                        loadMessages();
+                    } else if (data.error === 'Invalid password') {
+                        alert('❌ Invalid password');
+                    } else {
+                        alert('Error deleting message. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    alert('Error deleting message. Please try again.');
+                    console.error('Error:', error);
+                });
+        }
+
         document.getElementById('rsvpForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Implement form submission logic
-            alert('Thank you for your message!');
-            this.reset();
+
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            // Submit message to Vercel API
+            fetch('/api/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Thank you for your message! It has been saved.');
+                        document.getElementById('rsvpForm').reset();
+                        loadMessages();
+                        document.getElementById('messagesContainer').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert('Error saving message. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    alert('Error saving message. Please try again.');
+                    console.error('Error:', error);
+                });
+        });
+
+        // Load messages when page loads
+        window.addEventListener('load', function() {
+            loadMessages();
         });
 
         // Naver Map Integration (if needed)
