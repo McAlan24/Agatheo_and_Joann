@@ -59,20 +59,39 @@ export default async function handler(req, res) {
 
       try {
         // Get existing messages
-        const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
-          headers: {
-            'Authorization': `Bearer ${redisToken}`
-          }
-        });
-        const getData = await getResponse.json();
-        
         let messages = [];
-        if (getData.result) {
-          try {
-            messages = JSON.parse(getData.result);
-          } catch (e) {
+        
+        try {
+          const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
+            headers: {
+              'Authorization': `Bearer ${redisToken}`
+            }
+          });
+          
+          if (!getResponse.ok) {
+            console.error('Failed to get messages:', getResponse.status);
             messages = [];
+          } else {
+            const getData = await getResponse.json();
+            
+            if (getData.result) {
+              try {
+                const parsed = JSON.parse(getData.result);
+                messages = Array.isArray(parsed) ? parsed : [];
+              } catch (e) {
+                console.error('Parse error:', e);
+                messages = [];
+              }
+            }
           }
+        } catch (fetchError) {
+          console.error('Fetch error:', fetchError);
+          messages = [];
+        }
+
+        // Ensure messages is always an array
+        if (!Array.isArray(messages)) {
+          messages = [];
         }
 
         // Add new message
@@ -100,7 +119,7 @@ export default async function handler(req, res) {
         } else {
           const errorData = await setResponse.text();
           console.error('Redis set error:', errorData);
-          return res.status(500).json({ error: 'Failed to save message' });
+          return res.status(500).json({ error: 'Failed to save message to Redis' });
         }
       } catch (error) {
         console.error('Error saving message:', error);
@@ -122,20 +141,35 @@ export default async function handler(req, res) {
 
       try {
         // Get existing messages
-        const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
-          headers: {
-            'Authorization': `Bearer ${redisToken}`
-          }
-        });
-        const getData = await getResponse.json();
-        
         let messages = [];
-        if (getData.result) {
-          try {
-            messages = JSON.parse(getData.result);
-          } catch (e) {
-            messages = [];
+        
+        try {
+          const getResponse = await fetch(`${redisUrl}/get/wedding_messages`, {
+            headers: {
+              'Authorization': `Bearer ${redisToken}`
+            }
+          });
+          
+          if (getResponse.ok) {
+            const getData = await getResponse.json();
+            
+            if (getData.result) {
+              try {
+                const parsed = JSON.parse(getData.result);
+                messages = Array.isArray(parsed) ? parsed : [];
+              } catch (e) {
+                messages = [];
+              }
+            }
           }
+        } catch (fetchError) {
+          console.error('Fetch error:', fetchError);
+          messages = [];
+        }
+
+        // Ensure messages is always an array
+        if (!Array.isArray(messages)) {
+          messages = [];
         }
 
         // Filter out the message with the specified ID
