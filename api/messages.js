@@ -31,8 +31,18 @@ export default async function handler(req, res) {
           }
         });
         const data = await response.json();
-        const messages = data.result ? JSON.parse(data.result) : [];
-        return res.status(200).json(messages);
+        
+        if (data.result) {
+          try {
+            const messages = JSON.parse(data.result);
+            return res.status(200).json(Array.isArray(messages) ? messages : []);
+          } catch (parseError) {
+            console.error('Error parsing messages:', parseError);
+            return res.status(200).json([]);
+          }
+        }
+        
+        return res.status(200).json([]);
       } catch (error) {
         console.error('Error fetching messages:', error);
         return res.status(200).json([]);
@@ -55,7 +65,15 @@ export default async function handler(req, res) {
           }
         });
         const getData = await getResponse.json();
-        const messages = getData.result ? JSON.parse(getData.result) : [];
+        
+        let messages = [];
+        if (getData.result) {
+          try {
+            messages = JSON.parse(getData.result);
+          } catch (e) {
+            messages = [];
+          }
+        }
 
         // Add new message
         const newMessage = {
@@ -80,11 +98,13 @@ export default async function handler(req, res) {
         if (setResponse.ok) {
           return res.status(200).json({ success: true, message: newMessage });
         } else {
+          const errorData = await setResponse.text();
+          console.error('Redis set error:', errorData);
           return res.status(500).json({ error: 'Failed to save message' });
         }
       } catch (error) {
         console.error('Error saving message:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error', details: error.message });
       }
     }
 
@@ -108,7 +128,15 @@ export default async function handler(req, res) {
           }
         });
         const getData = await getResponse.json();
-        const messages = getData.result ? JSON.parse(getData.result) : [];
+        
+        let messages = [];
+        if (getData.result) {
+          try {
+            messages = JSON.parse(getData.result);
+          } catch (e) {
+            messages = [];
+          }
+        }
 
         // Filter out the message with the specified ID
         const filteredMessages = messages.filter(msg => msg.id !== id);
